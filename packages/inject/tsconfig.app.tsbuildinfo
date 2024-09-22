@@ -1,0 +1,1 @@
+{"root":["./src/create-injectable-hook.ts","./src/hook-context.tsx","./src/hook-provider.tsx","./src/index.ts","./src/merge-map.ts","./src/types.ts","./src/__tests__/inject.test.tsx"],"version":"5.6.2"}
