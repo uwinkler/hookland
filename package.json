@@ -2,6 +2,9 @@
   "dependencies": {
     "lerna": "^8.1.8"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "publish": "lerna run clean && lerna run build && lerna run test && lerna run lint && lerna publish",
     "netlify": "cd packages/www && yarn install && yarn build",
