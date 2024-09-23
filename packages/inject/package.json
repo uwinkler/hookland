@@ -7,7 +7,8 @@
     "dev": "vite",
     "lint": "eslint .",
     "build": "rm -rf dist && tsc -p ./tsconfig.build.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
