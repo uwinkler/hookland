@@ -250,11 +250,6 @@ test('it should work nested provider', () => {
 test('It should return the original hook if window.__HOOKLAND_INJECT_DISABLED__ is set to true ', () => {
   vi.stubGlobal('window', { __HOOKLAND_INJECT_DISABLED__: true })
 
-  console.log(
-    'window.__HOOKLAND_INJECT_DISABLED__',
-    window.__HOOKLAND_INJECT_DISABLED__
-  )
-
   function useSomeHook() {
     return 'Hello'
   }
