@@ -24,7 +24,7 @@ export function RandomGame() {
       <h1>
         {n1} {n2} {n3}
       </h1>
-      <Button variant="contained" onClick={roll}>
+      <Button variant={'contained'} onClick={roll}>
         Roll
       </Button>
     </div>

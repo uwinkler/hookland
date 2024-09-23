@@ -32,7 +32,7 @@ const useRandomNumbersMock = () => {
   }
 }
 
-export const randomNumbersHook: HookMockMapping = {
+export const randomNumbersMock: HookMockMapping = {
   for: useRandomNumbers,
   use: useRandomNumbersMock
 }
