@@ -7,6 +7,7 @@
   ],
   "scripts": {
     "publish": "lerna run clean && lerna run build && lerna run test && lerna run lint && lerna publish",
+    "lint": "lerna run lint",
     "netlify": "cd packages/www && yarn install && yarn build",
     "build": "lerna run build",
     "test": "lerna run test"
