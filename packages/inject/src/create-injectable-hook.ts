@@ -5,6 +5,13 @@ import { HookContext } from './hook-context'
 export function createInjectableHook<T extends (...args: any[]) => any>(
   hook: T
 ): (...funcArgs: Parameters<T>) => ReturnType<T> {
+  const HOOKLAND_INJECT_DISABLED =
+    window && window.__HOOKLAND_INJECT_DISABLED__ === true
+
+  if (HOOKLAND_INJECT_DISABLED) {
+    return hook
+  }
+
   return function useHook(...args: Parameters<T>): ReturnType<T> {
     const hooks = useContext(HookContext)
 

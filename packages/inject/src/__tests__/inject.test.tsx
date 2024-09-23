@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { render } from '@testing-library/react'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { createInjectableHook } from '../create-injectable-hook'
 import { HookProvider } from '../hook-provider'
 
@@ -245,4 +245,22 @@ test('it should work nested provider', () => {
       Servus
     </div>
   `)
+})
+
+test('It should return the original hook if window.__HOOKLAND_INJECT_DISABLED__ is set to true ', () => {
+  vi.stubGlobal('window', { __HOOKLAND_INJECT_DISABLED__: true })
+
+  console.log(
+    'window.__HOOKLAND_INJECT_DISABLED__',
+    window.__HOOKLAND_INJECT_DISABLED__
+  )
+
+  function useSomeHook() {
+    return 'Hello'
+  }
+  const useMockDummyHook = createInjectableHook(useSomeHook)
+
+  expect(useMockDummyHook).toBe(useSomeHook)
+
+  vi.unstubAllGlobals()
 })
