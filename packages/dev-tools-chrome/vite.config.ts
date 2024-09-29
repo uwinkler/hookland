@@ -1,17 +1,15 @@
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite' // Import the 'resolve' function
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import { crx } from '@crxjs/vite-plugin'
+import manifest from './manifest.json'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  test: {
-    globals: true
+  plugins: [react(), crx({ manifest })],
+  server: {
+    port: 3000
   },
   build: {
-    lib: {
-      entry: './src',
-      name: 'hookland-inject',
-      formats: ['es']
-    }
+    // minify: false
   }
 })

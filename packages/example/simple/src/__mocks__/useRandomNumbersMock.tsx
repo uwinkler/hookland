@@ -7,6 +7,7 @@ import { useRandomNumbers } from '../RandomGame'
 // It will always return the same lucky numbers in the same order
 // and will cycle back to the first set of numbers after the last one.
 // The last set of numbers is [9, 9, 9] and is a lucky number.
+// So we eventually get to the lucky number after 3 rolls.
 //
 // This is useful for testing the Random
 // component in a deterministic way

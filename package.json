@@ -5,6 +5,7 @@
   "workspaces": [
     "packages/doc",
     "packages/example/simple",
+    "packages/dev-tools-chrome",
     "packages/inject"
   ],
   "scripts": {
