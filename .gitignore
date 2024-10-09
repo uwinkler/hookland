@@ -1,3 +1,4 @@
 node_modules
 
 .nx/cache
+packages/.DS_Store

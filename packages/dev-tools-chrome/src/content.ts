@@ -2,7 +2,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('xx!!!', request)
   if (request.message) {
     console.log('Received message:', request.message)
-    // You can also send a response back if needed
     sendResponse({ status: 'Message received!' })
   }
 })

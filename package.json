@@ -6,6 +6,8 @@
     "packages/doc",
     "packages/example/simple",
     "packages/dev-tools-chrome",
+    "packages/dev-tools-commons",
+    "packages/dev-tools-client",
     "packages/inject"
   ],
   "scripts": {
