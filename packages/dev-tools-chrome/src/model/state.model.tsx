@@ -1,4 +1,5 @@
-import type { UiConfig } from '@hookland/dev-tool-commons'
+import type { UiConfig } from '@hookland/dev-tools-commons'
+
 export type State = {
-  uiConfig: UiConfig
+  uiConfigs: UiConfig[]
 }

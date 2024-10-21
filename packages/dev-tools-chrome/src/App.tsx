@@ -21,9 +21,7 @@ function App() {
 
         console.log(response)
       }}
-    >
-      
-    </Button>
+    ></Button>
   )
 }
 
