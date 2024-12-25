@@ -3,5 +3,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "npmClient": "yarn"
+  "npmClient": "npm",
 }
