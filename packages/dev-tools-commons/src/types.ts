@@ -2,6 +2,7 @@ export type HOOKLAND_CAPTN_CLIENT = 'HOOKLAND_CAPTN_ClIENT'
 export type HOOKLAND_CAPTN_EXTENSION = 'HOOKLAND_CAPTN_EXTENSION'
 export type Markdown = string
 export type UUID = string
+export type URLString = string
 
 export type Message =
   | MessageClientConfig
@@ -12,7 +13,7 @@ export interface UiConfig {
   id: UUID
   name: string
   path: string
-  url?: URL
+  url?: URLString
   descriptionShort?: string
   descriptionLong?: Markdown
   blocks: UiBlock[]
