@@ -3,10 +3,6 @@
     "lerna": "^8.1.8"
   },
   "workspaces": [
-    "packages/doc",
-    "packages/example/simple",
-    "packages/dev-tools-commons",
-    "packages/dev-tools-client",
     "packages/inject"
   ],
   "scripts": {
