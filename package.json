@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "lerna": "^8.1.8"
+    "lerna": "^8.1.9",
+    "nx": "^20.3.0"
   },
   "workspaces": [
     "packages/inject"
@@ -15,6 +16,5 @@
   "name": "hookland",
   "license": "MIT",
   "version": "0.0.0",
-  "npmClient": "npm",
-  "devDependencies": {}
+  "npmClient": "npm"
 }
