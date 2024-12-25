@@ -1,5 +1,5 @@
 {
-  "name": "calculator-chrome-extension",
+  "name": "dev-tools-chrome",
   "private": true,
   "version": "0.0.0",
   "type": "module",
