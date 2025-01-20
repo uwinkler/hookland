@@ -3,6 +3,7 @@ import { render } from '@testing-library/react'
 import { expect, test, vi } from 'vitest'
 import { createInjectableHook } from '../create-injectable-hook'
 import { HookProvider } from '../hook-provider'
+import { HookMockMapping } from '../types'
 
 const useCounter = createInjectableHook(() => {
   const count = 12

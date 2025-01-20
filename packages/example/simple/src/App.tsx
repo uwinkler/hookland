@@ -1,4 +1,7 @@
-import { disableInjectableHooks, HookProvider } from '@hookland/inject'
+import {
+  disableInjectableHooksDuringBuild,
+  HookProvider
+} from '@hookland/inject'
 import { RandomGame } from './RandomGame'
 
 import { randomNumbersMock } from './__mocks__/useRandomNumbersMock'
@@ -6,7 +9,7 @@ import { Layout } from './Layout'
 
 const isDev = import.meta.env.MODE === 'development'
 
-disableInjectableHooks(!isDev)
+disableInjectableHooksDuringBuild(!isDev)
 
 const hooksUsedInDevelopment = isDev ? [randomNumbersMock] : []
 

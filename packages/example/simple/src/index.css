@@ -3,4 +3,15 @@ html,
 #root {
   height: 100%;
   margin: 0;
+  background-color: aliceblue;
+}
+
+h1 {
+  color: rgb(31, 31, 125);
+  font-family: 'Lobster', sans-serif;
+}
+
+p {
+  font-size: 0.9rem;
+  color: #999;
 }

@@ -1,6 +1,6 @@
 import { HookMockMapping } from '@hookland/inject/dist/types'
 import { useState } from 'react'
-import { useRandomNumbers } from '../RandomGame'
+import { useRandomNumbers } from '../useRandomNumbers'
 
 // This is a mock implementation of the useRandomNumbers hook
 //
@@ -17,7 +17,7 @@ const useRandomNumbersMock = () => {
   const luckyNumbers = [
     [3, 8, 2],
     [1, 5, 9],
-    [0, 0, 7],
+    [1, 2, 3],
     [9, 9, 9]
   ]
 

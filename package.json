@@ -1,10 +1,13 @@
 {
   "dependencies": {
+    "fireworks-js": "^2.10.8",
     "lerna": "^8.1.9",
     "nx": "^20.3.0"
   },
   "workspaces": [
-    "packages/inject"
+    "packages/inject",
+    "packages/example/simple",
+    "packages/inject-testing-library"
   ],
   "scripts": {
     "publish": "lerna run clean && lerna run build && lerna run test && lerna run lint && lerna publish",

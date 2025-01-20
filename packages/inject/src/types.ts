@@ -1,2 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-function-type */
-export type HookMockMapping = { for: Function; use: Function }
+type FunctionType<A, B> = (...args: A[]) => B
+
+export type HookMockMapping<
+  T extends FunctionType<unknown, unknown> = (...args: unknown[]) => unknown
+> = {
+  for: T
+  use: T
+}
