@@ -248,7 +248,7 @@ test('it should work nested provider', () => {
   `)
 })
 
-test('It should return the original hook if window.__HOOKLAND_INJECT_DISABLED__ is set to true ', () => {
+test('It should return the original hook if disableInjectableHooksDuringBuild  is set to true ', () => {
   disableInjectableHooksDuringBuild(true)
 
   function useSomeHook() {
