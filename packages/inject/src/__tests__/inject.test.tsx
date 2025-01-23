@@ -3,6 +3,7 @@ import { render } from '@testing-library/react'
 import { expect, test, vi } from 'vitest'
 import { createInjectableHook } from '../create-injectable-hook'
 import { HookProvider } from '../hook-provider'
+import { disableInjectableHooksDuringBuild } from '../disable-injectable-hooks-during-build'
 
 const useCounter = createInjectableHook(() => {
   const count = 12
@@ -248,7 +249,7 @@ test('it should work nested provider', () => {
 })
 
 test('It should return the original hook if window.__HOOKLAND_INJECT_DISABLED__ is set to true ', () => {
-  vi.stubGlobal('window', { __HOOKLAND_INJECT_DISABLED__: true })
+  disableInjectableHooksDuringBuild(true)
 
   function useSomeHook() {
     return 'Hello'
@@ -256,6 +257,4 @@ test('It should return the original hook if window.__HOOKLAND_INJECT_DISABLED__ 
   const useMockDummyHook = createInjectableHook(useSomeHook)
 
   expect(useMockDummyHook).toBe(useSomeHook)
-
-  vi.unstubAllGlobals()
 })
