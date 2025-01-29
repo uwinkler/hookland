@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { render } from '@testing-library/react'
-import { expect, test, vi } from 'vitest'
+import { expect, test } from 'vitest'
 import { createInjectableHook } from '../create-injectable-hook'
+import { disableInjectableHooksDuringBuild } from '../disable-injectable-hooks-during-build'
 import { HookProvider } from '../hook-provider'
-import { HookMockMapping } from '../types'
 
 const useCounter = createInjectableHook(() => {
   const count = 12
@@ -248,8 +248,8 @@ test('it should work nested provider', () => {
   `)
 })
 
-test('It should return the original hook if window.__HOOKLAND_INJECT_DISABLED__ is set to true ', () => {
-  vi.stubGlobal('window', { __HOOKLAND_INJECT_DISABLED__: true })
+test('It should return the original hook if disableInjectableHooksDuringBuild  is set to true ', () => {
+  disableInjectableHooksDuringBuild(true)
 
   function useSomeHook() {
     return 'Hello'
@@ -257,6 +257,4 @@ test('It should return the original hook if window.__HOOKLAND_INJECT_DISABLED__ 
   const useMockDummyHook = createInjectableHook(useSomeHook)
 
   expect(useMockDummyHook).toBe(useSomeHook)
-
-  vi.unstubAllGlobals()
 })
