@@ -2,8 +2,8 @@
 import { render } from '@testing-library/react'
 import { expect, test, vi } from 'vitest'
 import { createInjectableHook } from '../create-injectable-hook'
-import { HookProvider } from '../hook-provider'
 import { disableInjectableHooksDuringBuild } from '../disable-injectable-hooks-during-build'
+import { HookProvider } from '../hook-provider'
 
 const useCounter = createInjectableHook(() => {
   const count = 12

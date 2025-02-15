@@ -15,7 +15,7 @@ export function RandomGame() {
             {n1} - {n2} - {n3}
           </h2>
           <Button variant={'contained'} onClick={roll}>
-            Roll
+            Roll the dice
           </Button>
         </CardContent>
       </Card>
