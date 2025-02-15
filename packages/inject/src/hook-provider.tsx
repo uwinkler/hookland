@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
-import React, { useContext } from 'react'
+import React, { PropsWithChildren, useContext } from 'react'
 import { HookContext } from './hook-context'
 import { mergeMap } from './merge-map'
 import { HookMockMapping } from './types'
-
-const initialHookMap = new Map<Function, Function>()
 
 /**
  * A hook provider is a component that allows you to override hooks in a subtree.
@@ -14,13 +12,10 @@ const initialHookMap = new Map<Function, Function>()
  *
  * In our case we use in our storybook app to mock out data loader hooks.
  */
-export function HookProvider({
-  children,
-  hooks = []
-}: {
-  children: React.ReactNode
-  hooks?: Array<HookMockMapping>
-}) {
+export function HookProvider(
+  props: PropsWithChildren<{ hooks?: Array<HookMockMapping> }>
+) {
+  const { hooks = [], children } = props
   const ctx = useContext(HookContext)
   const parentContext = React.useMemo(() => ctx || new Map(), [ctx])
 
@@ -29,7 +24,7 @@ export function HookProvider({
     hooks.forEach((hook) => {
       hookMap.set(hook.for, hook.use)
     })
-    return mergeMap(mergeMap(initialHookMap, parentContext), hookMap)
+    return mergeMap(mergeMap(new Map(), hookMap), parentContext)
   }, [hooks, parentContext])
 
   return (

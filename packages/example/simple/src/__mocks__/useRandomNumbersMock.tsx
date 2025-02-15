@@ -1,6 +1,6 @@
 import { HookMockMapping } from '@hookland/inject/dist/types'
 import { useState } from 'react'
-import { useRandomNumbers } from '../useRandomNumbers'
+import { useRandomNumbers } from '../RandomGame/useRandomNumbers'
 
 // This is a mock implementation of the useRandomNumbers hook
 //
@@ -12,23 +12,24 @@ import { useRandomNumbers } from '../useRandomNumbers'
 // This is useful for testing the Random
 // component in a deterministic way
 //
-const useRandomNumbersMock = () => {
+const LUCKY_NUMBERS = [
+  [3, 8, 2],
+  [1, 5, 9],
+  [1, 2, 3],
+  [9, 9, 9]
+]
+
+function useRandomNumbersMock() {
   const [count, setCount] = useState(0)
-  const luckyNumbers = [
-    [3, 8, 2],
-    [1, 5, 9],
-    [1, 2, 3],
-    [9, 9, 9]
-  ]
 
   function roll() {
-    setCount((count + 1) % luckyNumbers.length)
+    setCount((count + 1) % LUCKY_NUMBERS.length)
   }
 
   return {
-    n1: luckyNumbers[count][0],
-    n2: luckyNumbers[count][1],
-    n3: luckyNumbers[count][2],
+    n1: LUCKY_NUMBERS[count][0],
+    n2: LUCKY_NUMBERS[count][1],
+    n3: LUCKY_NUMBERS[count][2],
     roll
   }
 }

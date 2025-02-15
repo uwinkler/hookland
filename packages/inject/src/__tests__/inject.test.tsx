@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { render } from '@testing-library/react'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { createInjectableHook } from '../create-injectable-hook'
-import { disableInjectableHooksDuringBuild } from '../disable-injectable-hooks-during-build'
 import { HookProvider } from '../hook-provider'
+import { disableInjectableHooksDuringBuild } from '../disable-injectable-hooks-during-build'
 
 const useCounter = createInjectableHook(() => {
   const count = 12
@@ -178,7 +178,7 @@ test('it should work with nested provider', () => {
   `)
 })
 
-test('it should work nested provider and reset the hook to null', () => {
+test('it should work nested provider and the outermost should override the inner ', () => {
   const Component = (
     <HookProvider
       hooks={[
@@ -192,7 +192,7 @@ test('it should work nested provider and reset the hook to null', () => {
         hooks={[
           {
             for: useCounter,
-            use: null as any
+            use: () => ({ count: -1 })
           }
         ]}
       >
@@ -207,8 +207,8 @@ test('it should work nested provider and reset the hook to null', () => {
   expect(container).toMatchInlineSnapshot(`
     <div>
       Count is 
-      12
-      Hello World. Count is 12
+      0
+      Hello World. Count is 0
     </div>
   `)
 })
@@ -257,4 +257,42 @@ test('It should return the original hook if disableInjectableHooksDuringBuild  i
   const useMockDummyHook = createInjectableHook(useSomeHook)
 
   expect(useMockDummyHook).toBe(useSomeHook)
+})
+
+test('It should be usable with test mocks ', () => {
+  const mock = vi.fn(useMockedCounter)
+  const Component = (
+    <HookProvider
+      hooks={[
+        {
+          for: useCounter,
+          use: mock
+        }
+      ]}
+    >
+      <HookProvider
+        hooks={[
+          {
+            for: useCounter,
+            use: useMockedCounter
+          }
+        ]}
+      >
+        <Counter />
+        <Hello />
+      </HookProvider>
+    </HookProvider>
+  )
+
+  const { container } = render(Component)
+
+  expect(container).toMatchInlineSnapshot(`
+    <div>
+      Count is 
+      0
+      Hello World. Count is 0
+    </div>
+  `)
+
+  expect(mock).toHaveBeenCalledTimes(2)
 })

@@ -8,16 +8,20 @@
     "prod": "vite --mode production",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "dependencies": {
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.1.0",
-    "@mui/material": "^6.1.1",
-    "@hookland/inject": "^1.1.0"
+    "@hookland/inject": "^1.1.0",
+    "@mui/material": "^6.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@playwright/experimental-ct-react": "^1.50.1",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.8",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.1",
