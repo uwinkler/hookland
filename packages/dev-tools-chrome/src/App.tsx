@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import Button from '@mui/joy/Button';
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import AppBar from './components/AppBar';
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -8,6 +10,8 @@ function App() {
   return (
     <>
       <div>
+        <AppBar />
+        <Button>  Click</Button>
         <a href="https://vite.dev" target="_blank">
         </a>
         <a href="https://react.dev" target="_blank">
