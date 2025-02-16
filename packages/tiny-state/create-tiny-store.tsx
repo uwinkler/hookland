@@ -61,17 +61,26 @@ export function createTinyStore(name = "TinyStore") {
       };
     }
 
-    function createGetState(map: Map<symbol, unknown>) {
+    function createGetState(map: Map<symbol, unknown>, defaultValue) {
       return function getState(): T {
-        return map.has(key) ? (map.get(key) as T) : value;
+        return map.has(key) ? (map.get(key) as T) : defaultValue;
       };
     }
 
-    function useTinyStateHook() {
+    function useTinyStateHook(defaultValue: T = value) {
       const map = useContext(Context);
-      const getState = React.useMemo(() => createGetState(map), [map]);
+      const getState = React.useMemo(() => createGetState(map, defaultValue), [map]);
       const setState = React.useMemo(() => createSetState(map), [map]);
+
       const valueToUse = React.useSyncExternalStore(subscribe, getState);
+
+      React.useEffect(() => {
+        if (defaultValue !== value) {
+          setState(defaultValue);
+        }
+      }, [defaultValue, setState])
+
+
       return [valueToUse, setState] as const;
     }
 

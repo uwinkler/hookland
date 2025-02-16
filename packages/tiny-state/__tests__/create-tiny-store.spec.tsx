@@ -252,3 +252,63 @@ test("createTinyStore - using Provider and updating inside of the component tree
   expect(screen.getByText(/{"a":2}/)).not.toBeNull();
   expect(screen.getByText(/{"b":1}/)).not.toBeNull();
 });
+
+
+
+
+test("createTinyStore - using default value", () => {
+  const [createTinyState, MyTinyStoreProvider] = createTinyStore();
+  const useTinyState = createTinyState(1);
+
+  function CompWrapper() {
+    return (
+      <MyTinyStoreProvider>
+        <CompA />
+      </MyTinyStoreProvider>
+    );
+  }
+
+  function CompA() {
+    // Update the default value to 2
+    const [value] = useTinyState(2);
+    return JSON.stringify({ a: value });
+  }
+
+  render(<CompWrapper />);
+
+  expect(screen.getByText(/{"a":2}/)).not.toBeNull();
+});
+
+
+test("createTinyStore - using default value ", () => {
+  const [createTinyState, MyTinyStoreProvider] = createTinyStore();
+  const useTinyState = createTinyState(1);
+
+  function CompWrapper() {
+    return (
+      <MyTinyStoreProvider>
+        <CompB />
+        <CompA />
+      </MyTinyStoreProvider>
+    );
+  }
+
+  function CompA() {
+    // Update the default value to 2
+    const [value] = useTinyState(2);
+    return JSON.stringify({ a: value });
+  }
+
+  function CompB() {
+    // We don't update the default value
+    // but we exect the default value to be 2
+    // as the default value is set in CompA
+    const [value] = useTinyState();
+    return JSON.stringify({ b: value });
+  }
+
+  render(<CompWrapper />);
+
+  expect(screen.getByText(/{"a":2}/)).not.toBeNull();
+  expect(screen.getByText(/{"b":2}/)).not.toBeNull();
+}); 
