@@ -7,7 +7,10 @@
   "workspaces": [
     "packages/inject",
     "packages/example/simple",
-    "packages/inject-testing-library"
+    "packages/inject-testing-library",
+    "packages/dev-tools-chrome",
+    "packages/dev-tools-client",
+    "packages/dev-tools-commons"    
   ],
   "scripts": {
     "publish": "lerna run clean && lerna run build && lerna run test && lerna run lint && lerna publish",
@@ -21,3 +24,4 @@
   "version": "0.0.0",
   "npmClient": "npm"
 }
+
