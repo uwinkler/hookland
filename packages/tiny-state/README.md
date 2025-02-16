@@ -1,6 +1,6 @@
 # Tiny State
 
-Tiny State is a simple and vey tiny state management library for React.
+_Tiny State_ is a simple, convenient, atom like, and vey tiny state management library for React.
 
 Usage:
 

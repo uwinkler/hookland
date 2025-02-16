@@ -269,7 +269,8 @@ test("createTinyStore - using default value", () => {
   }
 
   function CompA() {
-    // Update the default value to 2
+    // Initialize with a new default value of 2. This
+    // should override the default value of 1
     const [value] = useTinyState(2);
     return JSON.stringify({ a: value });
   }
@@ -300,9 +301,9 @@ test("createTinyStore - using default value ", () => {
   }
 
   function CompB() {
-    // We don't update the default value
-    // but we exect the default value to be 2
-    // as the default value is set in CompA
+    // We don't update the initial value
+    // but we expect the initial value to be 2 now,
+    // as the default value is overridden in CompA
     const [value] = useTinyState();
     return JSON.stringify({ b: value });
   }

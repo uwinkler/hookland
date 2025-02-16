@@ -61,7 +61,7 @@ export function createTinyStore(name = "TinyStore") {
       };
     }
 
-    function createGetState(map: Map<symbol, unknown>, defaultValue) {
+    function createGetState(map: Map<symbol, unknown>, defaultValue: T) {
       return function getState(): T {
         return map.has(key) ? (map.get(key) as T) : defaultValue;
       };
