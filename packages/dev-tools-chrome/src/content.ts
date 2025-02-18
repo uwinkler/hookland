@@ -1,5 +1,4 @@
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-  console.log('xx!!!', request)
   if (request.message) {
     console.log('Received message:', request.message)
     sendResponse({ status: 'Message received!' })
@@ -13,3 +12,8 @@ console.log('hookland content.js loaded')
     // do something with response here, not outside the function
     console.log('Response:', response)
   })()
+
+
+window.addEventListener('message', (event) => {
+  console.log('Content listener received message:', event.data)
+})

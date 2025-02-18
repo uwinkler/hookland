@@ -27,3 +27,13 @@ export function RandomGame() {
     </Stack>
   )
 }
+
+
+function loaded() {
+  setTimeout(() => {
+    window.postMessage({ message: 'Hello from the page!' }, '*')
+  }
+    , 100)
+}
+
+loaded()

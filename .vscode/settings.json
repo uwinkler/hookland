@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["CAPTN", "HOOKLAND"]
+  "cSpell.words": ["CAPTN", "HOOKLAND"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true
 }

@@ -1,8 +1,10 @@
 {
   "dependencies": {
+    "@hookland/dev-tools-commons": "^0.0.1",
     "fireworks-js": "^2.10.8",
     "lerna": "^8.1.9",
-    "nx": "^20.3.0"
+    "nx": "^20.3.0",
+    "zod": "^3.24.2"
   },
   "workspaces": [
     "packages/inject",
