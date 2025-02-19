@@ -7,7 +7,7 @@ export function RandomGame() {
 
   return (
     <Stack spacing={3} alignItems={'center'}>
-      <h1>{allEqual ? 'You win!' : 'Random Game'}</h1>
+      <h1>{allEqual ? 'You win 100 EUR!' : 'Random Game'}</h1>
 
       <Card sx={{ minWidth: 200 }}>
         <CardContent sx={{ display: 'grid', placeContent: 'center' }}>
@@ -27,13 +27,3 @@ export function RandomGame() {
     </Stack>
   )
 }
-
-
-function loaded() {
-  setTimeout(() => {
-    window.postMessage({ message: 'Hello from the page!' }, '*')
-  }
-    , 100)
-}
-
-loaded()

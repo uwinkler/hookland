@@ -1,19 +1,19 @@
+import { HOOKLAND_HUD_CLIENT, HOOKLAND_HUD_EXTENSION } from '@hookland/dev-tools-commons'
+
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-  if (request.message) {
-    console.log('Received message:', request.message)
-    sendResponse({ status: 'Message received!' })
+  if(request.source === HOOKLAND_HUD_EXTENSION) {
+    console.log('Received from HUD:', request, _sender)
+    window.postMessage(request, '*')
   }
+  return true
 })
 
 console.log('hookland content.js loaded')
-  ; (async () => {
-    console.log('Sending message...')
-    const response = await chrome.runtime.sendMessage({ greeting: 'hello' })
-    // do something with response here, not outside the function
-    console.log('Response:', response)
-  })()
-
 
 window.addEventListener('message', (event) => {
-  console.log('Content listener received message:', event.data)
+  if (event.data.source === HOOKLAND_HUD_CLIENT) {
+    console.log('Content.ts received message from client:', event.data)
+    chrome.runtime.sendMessage(event.data)
+  }
 })
+¯
