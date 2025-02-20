@@ -1,7 +1,10 @@
-import { HOOKLAND_HUD_CLIENT, HOOKLAND_HUD_EXTENSION } from '@hookland/dev-tools-commons'
+import {
+  HOOKLAND_HUD_CLIENT,
+  HOOKLAND_HUD_EXTENSION
+} from '@hookland/dev-tools-commons'
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-  if(request.source === HOOKLAND_HUD_EXTENSION) {
+  if (request.source === HOOKLAND_HUD_EXTENSION) {
     console.log('Received from HUD:', request, _sender)
     window.postMessage(request, '*')
   }
@@ -16,4 +19,3 @@ window.addEventListener('message', (event) => {
     chrome.runtime.sendMessage(event.data)
   }
 })
-¯
