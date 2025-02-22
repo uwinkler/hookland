@@ -10,5 +10,5 @@ createRoot(document.getElementById('root')!).render(
     <CssVarsProvider>
       <App />
     </CssVarsProvider>
-  </StrictMode>,
+  </StrictMode>
 )

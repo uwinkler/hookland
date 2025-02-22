@@ -16,6 +16,25 @@ const ScenarioSchema = z.object({
   description: HUDMarkdownSchema
 })
 
+const DevDuckTypeSchema = z.union([
+  z.literal('listitem'),
+  z.literal('state'),
+  z.literal('button'),
+  z.literal('select'),
+  z.literal('md')
+])
+
+// Common entry schema
+const DevDuckEntrySchema = z.object({
+  id: HUD_UUID_Schema,
+  type: DevDuckTypeSchema,
+  path: z.string(),
+  text: z.string(),
+  subtext: z.string(),
+  content: HUDMarkdownSchema,
+  history: z.boolean().optional()
+})
+
 // MessageClient schema
 const MessageClientSchema = <T extends z.ZodType, P extends z.ZodType>(
   type: T,
