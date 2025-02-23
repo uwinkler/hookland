@@ -1,16 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RandomGame } from './RandomGame/RandomGame'
 
 import {
   disableInjectableHooksDuringBuild,
   HookProvider
 } from '@hookland/inject'
-import { Paper } from '@mui/material'
-import { renderToReadableStream } from 'react-dom/server'
-import { ClientComp } from './ClientComp'
 import { Layout } from './Layout'
 import { Login } from './Login/Login'
 import { randomNumbersMock } from './__mocks__/useRandomNumbersMock'
 import { useAppState } from './useAppState'
+import React from 'react'
 
 const isDev = import.meta.env.MODE === 'development'
 disableInjectableHooksDuringBuild(isDev)
@@ -22,7 +21,7 @@ function App() {
   const showLogin = appState.state !== 'success'
   const showRandomGame = appState.state === 'success'
 
-  const ret = (
+  return (
     <HookProvider hooks={[]}>
       <Layout>
         {showLogin && <Login />}
@@ -30,10 +29,4 @@ function App() {
       </Layout>
     </HookProvider>
   )
-
-  console.log(ret)
-
-  return ret
 }
-
-export default App
