@@ -12,11 +12,14 @@
     "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "dependencies": {
+    "@babel/parser": "^7.26.9",
+    "@babel/traverse": "^7.26.9",
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.1.0",
     "@hookland/inject": "^1.1.0",
     "@hookland/tiny-state": "^1.1.0",
-    "@mui/material": "^6.1.1"
+    "@mui/material": "^6.1.1",
+    "tsx": "^4.19.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
