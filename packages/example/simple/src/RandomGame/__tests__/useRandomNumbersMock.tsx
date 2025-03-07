@@ -19,7 +19,7 @@ const LUCKY_NUMBERS = [
   [9, 9, 9]
 ]
 
-export function useRandomNumbersMock() {
+function useRandomNumbersMock() {
   const [count, setCount] = useState(0)
 
   function roll() {

@@ -1,25 +1,35 @@
 import babel from '@babel/parser'
 import _traverse from '@babel/traverse'
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const traverse = (_traverse as any).default as typeof _traverse
 import fs from 'fs'
 import { glob } from 'glob'
 import { resolve } from 'path'
 import { Plugin } from 'vite'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const traverse = (_traverse as any).default as typeof _traverse
 
-export function fixtures(): Plugin {
+export function fixtures(
+  { fixtureGlob, pebbleGlob } = {
+    fixtureGlob: './src/**/*.fixtures.tsx',
+    pebbleGlob: './src/**/*.pebble.tsx'
+  }
+): Plugin {
   return {
     name: 'vite-plugin-inject-fixtures',
     transformIndexHtml(html) {
       try {
-        // Use glob to find all *.fixture.tsx files in the src directory
-        const fixturesPath = glob.sync(
-          resolve(__dirname, '../src/**/*.blocks.tsx')
-        )
+        const fixturePaths = glob.sync(resolve(__dirname, fixtureGlob))
+        const pebblePaths = glob.sync(resolve(__dirname, pebbleGlob))
 
-        const script = `<script>window.__FIXTURES__ = ${JSON.stringify({
-          fixtures: fixturesPath.map(extractFixtureInformation).filter(Boolean)
-        })};</script>`
+        const script = `<script>
+          window.__FIXTURES__ = ${JSON.stringify({
+            fixtures: fixturePaths
+              .map((path) => extractFixtureInformation(path, '@fixture'))
+              .filter(Boolean),
+            pebbles: pebblePaths
+              .map((path) => extractFixtureInformation(path, '@pebble'))
+              .filter(Boolean)
+          })};
+          </script>`
         return html.replace('</body>', `${script}</body>`)
       } catch (error) {
         console.error('Error in vite-plugin-inject-fixtures:', error)
@@ -28,7 +38,7 @@ export function fixtures(): Plugin {
     }
   }
 
-  function extractFixtureInformation(filePath: string) {
+  function extractFixtureInformation(filePath: string, annotation: string) {
     const code = fs.readFileSync(filePath, 'utf-8')
 
     const ast = babel.parse(code, {
@@ -43,7 +53,7 @@ export function fixtures(): Plugin {
       FunctionDeclaration(path) {
         const { leadingComments } = path.node
 
-        let jsDoc = null
+        let jsDoc = ''
 
         if (leadingComments && leadingComments.length > 0) {
           jsDoc = leadingComments[0].value.trim()
@@ -52,7 +62,7 @@ export function fixtures(): Plugin {
         const functionName = path?.node?.id?.name
         const isExported = path?.parent?.type === 'ExportNamedDeclaration'
 
-        if (!functionName || !isExported) {
+        if (!functionName || !isExported || !jsDoc.includes(annotation)) {
           return null
         }
 

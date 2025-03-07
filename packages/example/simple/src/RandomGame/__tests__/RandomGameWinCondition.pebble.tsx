@@ -8,14 +8,16 @@ const randomNumbersAlwaysWin: HookMockMapping = {
     n1: 1,
     n2: 1,
     n3: 1,
-    roll: () => {}
+    roll: () => { }
   })
 }
 
 /**
  * This is a test
+ * 
+ * @pebble
  */
-export function RandomGameAlwaysWinFixture() {
+export function RandomGameAlwaysWinPebble() {
   return (
     <HookProvider hooks={[randomNumbersAlwaysWin]}>
       <RandomGame />

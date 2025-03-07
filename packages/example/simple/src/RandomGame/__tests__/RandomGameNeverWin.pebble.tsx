@@ -12,6 +12,8 @@ const randomNumbersAlwaysWin: HookMockMapping = {
   })
 }
 
+
+
 /**
  * A fixture that always wins the game.
  *
@@ -19,8 +21,10 @@ const randomNumbersAlwaysWin: HookMockMapping = {
  * - The game will always show the winning screen.
  * - No other rolls are possible.
  * - The `roll` function is disabled.
+ * 
+ * @pebble
  */
-export function RandomGameAlwaysWinFixture() {
+export function RandomGameAlwaysWinPebble() {
   return (
     <HookProvider hooks={[randomNumbersAlwaysWin]}>
       <RandomGame />
@@ -28,4 +32,4 @@ export function RandomGameAlwaysWinFixture() {
   )
 }
 
-export default RandomGameAlwaysWinFixture
+
