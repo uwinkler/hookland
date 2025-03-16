@@ -12,29 +12,30 @@ import { useRandomNumbers } from '../useRandomNumbers'
 // This is useful for testing the Random
 // component in a deterministic way
 //
-const LUCKY_NUMBERS = [
-  [3, 8, 2],
-  [1, 5, 9],
-  [1, 2, 3],
-  [9, 9, 9]
-]
+const LUCKY_NUMBERS =
+  [
+    382,
+    159,
+    123,
+    999
+  ]
 
-function useRandomNumbersMock() {
+export function useRandomNumbersMock() {
   const [count, setCount] = useState(0)
 
-  function roll() {
-    setCount((count + 1) % LUCKY_NUMBERS.length)
+  function nextLuckyNumber() {
+    const nextIdx = (count + 1) % LUCKY_NUMBERS.length
+    setCount(nextIdx)
+    return LUCKY_NUMBERS[nextIdx]
   }
 
   return {
-    n1: LUCKY_NUMBERS[count][0],
-    n2: LUCKY_NUMBERS[count][1],
-    n3: LUCKY_NUMBERS[count][2],
-    roll
+    luckyNumber: LUCKY_NUMBERS[count],
+    nextLuckyNumber,
   }
 }
 
-export const randomNumbersMock: HookMockMapping = {
+export const randomNumbersMock: HookMockMapping<typeof useRandomNumbers> = {
   for: useRandomNumbers,
   use: useRandomNumbersMock
 }

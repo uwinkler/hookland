@@ -2,13 +2,12 @@ import { HookMockMapping, HookProvider } from '@hookland/inject'
 import { RandomGame } from '../RandomGame'
 import { useRandomNumbers } from '../useRandomNumbers'
 
-const randomNumbersAlwaysWin: HookMockMapping = {
+const randomNumbersAlwaysWin: HookMockMapping<typeof useRandomNumbers> = {
   for: useRandomNumbers,
   use: () => ({
-    n1: 1,
-    n2: 2,
-    n3: 3,
-    roll: () => { }
+    luckyNumber: 999,
+    balance: 100,
+    nextLuckyNumber: () => 999
   })
 }
 

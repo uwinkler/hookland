@@ -1,29 +1,64 @@
-import { Button, Card, CardContent, Stack } from '@mui/material'
-import { useRandomNumbers } from './useRandomNumbers'
+import { Button, Card, CardContent, Stack, Typography } from '@mui/material'
+import { Link } from 'react-router'
+import { RandomGameAppBar } from '../AppBar/RandomGameAppBar'
+import { Layout } from '../Layout'
+import { isWin } from './isWin'
+import { useGamePlay } from './useGamePlay'
 
 export function RandomGame() {
-  const { n1, n2, n3, roll } = useRandomNumbers()
-  const allEqual = n1 === n2 && n2 === n3
+  const { luckyNumber, roll, balance } = useGamePlay()
+  const win = isWin(luckyNumber)
+  const isDisabled = balance <= 0
 
   return (
-    <Stack spacing={3} alignItems={'center'}>
-      <h1>{allEqual ? 'You win 100 EUR!' : 'Random Game'}</h1>
+    <>
+      <RandomGameAppBar />
+      <Layout>
+        <Stack spacing={3} alignItems={'center'}>
+          {!isDisabled && (
+            <Typography variant="h4">
+              {win ? 'You win 100,- EUR! 🥳🎉' : `${balance},00 €`}
+            </Typography>
+          )}
+          {isDisabled && (
+            <Typography variant="h3">You are out of money!</Typography>
+          )}
+          <Card
+            sx={{
+              minWidth: 400,
+              minHeight: 400,
+              display: 'grid',
+              placeContent: 'center'
+            }}
+          >
+            <CardContent>
+              <Stack spacing={3} alignItems={'center'}>
+                {!isDisabled && (
+                  <>
+                    <Typography variant="h1">{luckyNumber}</Typography>
+                    <Button variant={'contained'} onClick={roll}>
+                      Roll
+                    </Button>
+                  </>
+                )}
+                {isDisabled && (
+                  <>
+                    <Typography variant="h1">😢</Typography>
+                    <Button variant={'contained'} to="/top-up" component={Link}>
+                      Top up some money!
+                    </Button>
+                  </>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
 
-      <Card sx={{ minWidth: 200 }}>
-        <CardContent sx={{ display: 'grid', placeContent: 'center' }}>
-          <h2>
-            {n1} - {n2} - {n3}
-          </h2>
-          <Button variant={'contained'} onClick={roll}>
-            Roll
-          </Button>
-        </CardContent>
-      </Card>
-
-      <p>
-        Click the button to roll the dice. If all three numbers are the same,
-        you win!
-      </p>
-    </Stack>
+          <p>
+            Click the button to roll the dice. If all three numbers are the
+            same, you win!
+          </p>
+        </Stack>
+      </Layout>
+    </>
   )
 }

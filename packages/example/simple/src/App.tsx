@@ -1,17 +1,16 @@
-import { Layout } from './Layout'
+import { Route, Routes } from 'react-router'
 import { Login } from './Login/Login'
+import ProtectedRoute from './Login/ProtectedRoute'
 import { RandomGame } from './RandomGame/RandomGame'
-import { useAppState } from './useAppState'
+import { TopUp } from './TopUp/TopUp'
 
-function App() {
-  const { appState } = useAppState()
-  const showLogin = appState.state !== 'success'
-  const showRandomGame = appState.state === 'success'
-
-  return <Layout>
-    {showLogin && <Login />}
-    {showRandomGame && <RandomGame />}
-  </Layout>
+export default function App() {
+  return <Routes>
+    <Route path="/login" element={<Login />} />
+    <Route path="/" element={<ProtectedRoute />} >
+      <Route path="game" element={<RandomGame />} />
+      <Route path="top-up" element={<TopUp />} />
+    </Route>
+  </Routes>
 }
 
-export default App

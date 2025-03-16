@@ -1,7 +1,7 @@
 import { createScenario } from "../HooklandScenarioProvider"
 import { randomNumbersMock } from "../RandomGame/__tests__/useRandomNumbersMock"
 import { useRandomNumbers } from "../RandomGame/useRandomNumbers"
-import { useAppState } from "../useAppState"
+import { useAuthState } from "../useAuthState"
 
 export const scenarioWithoutAnyHooks = createScenario({
   id: 'DM-123',
@@ -50,7 +50,7 @@ export const scenarioShowLoginProgress = createScenario({
   description: 'Shows the login progress screen only',
   hooks: [
     {
-      for: useAppState,
+      for: useAuthState,
       use: () => ({
         appState: {
           state: 'loading',

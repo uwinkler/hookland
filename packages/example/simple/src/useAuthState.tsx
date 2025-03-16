@@ -1,58 +1,58 @@
 import { createInjectableHook } from '@hookland/inject'
 import { createTinyState } from '@hookland/tiny-state'
 import React from 'react'
+import { useNavigate } from 'react-router'
 
 type State = {
-  state: 'login' | 'loading' | 'error' | 'success'
+  state: 'no-user' | 'loading' | 'error' | 'success'
   user: string | null
-  balance: number
 }
 
-const useAppStateInternal = createTinyState<State>({
-  state: 'login',
+const useAuthStateInternal = createTinyState<State>({
+  state: 'no-user',
   user: null,
-  balance: -1
 })
 
-export const useAppState = createInjectableHook(() => {
-  const [appState, setAppState] = useAppStateInternal()
+export const useAuthState = createInjectableHook(() => {
+  const navigate = useNavigate()
+  const [authState, setAuthState] = useAuthStateInternal()
 
   const logout = React.useCallback(() => {
-    setAppState({
-      state: 'login',
+    setAuthState({
+      state: 'no-user',
       user: null,
-      balance: -1
     })
-  }, [setAppState])
+    navigate('/login')
+  }, [setAuthState, navigate])
 
   const login = React.useCallback(
     async (props: { userName: string; password: string }) => {
       const { userName, password } = props
-      setAppState({
-        ...appState,
+
+      setAuthState({
+        user: null,
         state: 'loading'
       })
 
       const res = await fetchUser(userName, password)
 
       if (res.status == 'ok') {
-        setAppState({
+        setAuthState({
+          state: 'success',
           user: userName,
-          balance: res.balance,
-          state: 'success'
         })
+        navigate('/game')
       } else {
-        setAppState({
+        setAuthState({
+          state: 'error',
           user: null,
-          balance: -1,
-          state: 'error'
         })
       }
     },
-    [appState, setAppState]
+    [navigate, setAuthState]
   )
 
-  return { appState, setAppState, logout, login }
+  return { authState, setAuthState, logout, login }
 })
 
 // This is a mock function that simulates a login request to a server.
@@ -62,14 +62,13 @@ export const useAppState = createInjectableHook(() => {
 function fetchUser(
   userName: string,
   password: string
-): Promise<{ status: 'ok'; balance: number } | { status: 'error' }> {
+): Promise<{ status: 'ok' | 'error' }> {
   if (userName === 'Klaus' && password === '1234') {
     return new Promise((resolve) =>
       setTimeout(
         () =>
           resolve({
             status: 'ok',
-            balance: 100
           }),
         300
       )

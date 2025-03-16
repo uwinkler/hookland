@@ -18,7 +18,10 @@
     "@fontsource/roboto": "^5.1.0",
     "@hookland/inject": "^1.1.0",
     "@hookland/tiny-state": "^1.1.0",
+    "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.1.1",
+    "react-hook-form": "^7.54.2",
+    "react-router": "^7.3.0",
     "tsx": "^4.19.3"
   },
   "devDependencies": {

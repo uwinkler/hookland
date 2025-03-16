@@ -7,8 +7,7 @@ export function Layout({ children }: React.PropsWithChildren<unknown>) {
       sx={{
         display: 'grid',
         placeContent: 'center',
-        height: '100%',
-        width: '100%'
+        height: '100vh',
       }}
     >
       {children}

@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   CircularProgress,
@@ -9,18 +8,18 @@ import {
   Typography
 } from '@mui/material'
 import React from 'react'
-import { useAppState } from '../useAppState'
+import { useAuthState } from '../useAuthState'
+import { Layout } from '../Layout'
 
 export function Login() {
-  const { appState } = useAppState()
-  const state = appState.state
+  const { authState } = useAuthState()
 
   return (
-    <>
-      {state === 'login' && <LoginForm />}
-      {state === 'loading' && <Loading />}
-      {state === 'error' && <LoginError />}
-    </>
+    <Layout>
+      {authState.state === 'no-user' && <LoginForm />}
+      {authState.state === 'loading' && <Loading />}
+      {authState.state === 'error' && <LoginError />}
+    </Layout>
   )
 }
 
@@ -30,7 +29,11 @@ function Loading() {
   return (
     <Paper
       elevation={3}
-      sx={{ ...SIZE, display: 'grid', placeContent: 'center' }}
+      sx={{
+        ...SIZE,
+        display: 'grid',
+        //  placeContent: 'center'
+      }}
     >
       <CircularProgress />
     </Paper>
@@ -38,7 +41,7 @@ function Loading() {
 }
 
 function LoginForm() {
-  const { login } = useAppState()
+  const { login } = useAuthState()
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
 
@@ -100,14 +103,9 @@ function LoginForm() {
 }
 
 function LoginError() {
-  const { appState, setAppState } = useAppState()
+  const { logout } = useAuthState()
 
-  const onTryAgain = () => {
-    setAppState({
-      ...appState,
-      state: 'login'
-    })
-  }
+  const onTryAgain = () => logout()
 
   return (
     <Paper sx={{ ...SIZE, display: 'flex' }} elevation={3}>
