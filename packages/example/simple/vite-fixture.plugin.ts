@@ -10,7 +10,7 @@ const traverse = (_traverse as any).default as typeof _traverse
 export function fixtures(
   { fixtureGlob, pebbleGlob } = {
     fixtureGlob: './src/**/*.fixtures.tsx',
-    pebbleGlob: './src/**/*.pebble.tsx'
+    pebbleGlob: './src/**/*.tsx'
   }
 ): Plugin {
   return {
@@ -19,6 +19,9 @@ export function fixtures(
       try {
         const fixturePaths = glob.sync(resolve(__dirname, fixtureGlob))
         const pebblePaths = glob.sync(resolve(__dirname, pebbleGlob))
+
+        // console.log('fixturePaths', fixturePaths)
+        // console.log('pebblePaths', pebblePaths)
 
         const script = `<script>
           window.__FIXTURES__ = ${JSON.stringify({
@@ -44,6 +47,7 @@ export function fixtures(
     const ast = babel.parse(code, {
       sourceType: 'module',
       attachComment: true,
+      tokens: true,
       plugins: ['jsx', 'typescript'] // Enable JSX parsing
     })
 
@@ -52,13 +56,14 @@ export function fixtures(
     traverse(ast, {
       FunctionDeclaration(path) {
         const { leadingComments } = path.node
+        console.log(leadingComments)
 
         let jsDoc = ''
 
         if (leadingComments && leadingComments.length > 0) {
           jsDoc = leadingComments[0].value.trim()
         }
-        // Extract function name
+
         const functionName = path?.node?.id?.name
         const isExported = path?.parent?.type === 'ExportNamedDeclaration'
 

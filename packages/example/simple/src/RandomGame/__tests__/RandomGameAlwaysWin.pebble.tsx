@@ -1,6 +1,7 @@
 import { HookMockMapping, HookProvider } from '@hookland/inject'
 import { RandomGame } from '../RandomGame'
 import { useRandomNumbers } from '../useRandomNumbers'
+import { balanceMock200 } from './useBalanceMock'
 
 const randomNumbersAlwaysWin: HookMockMapping<typeof useRandomNumbers> = {
   for: useRandomNumbers,
@@ -11,8 +12,6 @@ const randomNumbersAlwaysWin: HookMockMapping<typeof useRandomNumbers> = {
   })
 }
 
-
-
 /**
  * A fixture that always wins the game.
  *
@@ -20,15 +19,13 @@ const randomNumbersAlwaysWin: HookMockMapping<typeof useRandomNumbers> = {
  * - The game will always show the winning screen.
  * - No other rolls are possible.
  * - The `roll` function is disabled.
- * 
+ *
  * @pebble
  */
 export function RandomGameAlwaysWinPebble() {
   return (
-    <HookProvider hooks={[randomNumbersAlwaysWin]}>
+    <HookProvider hooks={[randomNumbersAlwaysWin, balanceMock200]}>
       <RandomGame />
     </HookProvider>
   )
 }
-
-

@@ -9,7 +9,11 @@ export const useBalance = createInjectableHook(() => {
 
   React.useEffect(() => {
     if (user) {
-      fetchBalance(user).then(setBalance)
+      fetchBalance(user)
+        .then(setBalance)
+        .catch(() => {
+          setBalance(0)
+        })
     } else {
       setBalance(0)
     }

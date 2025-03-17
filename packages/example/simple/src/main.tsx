@@ -1,16 +1,13 @@
 import {
   disableInjectableHooksDuringBuild,
-  HookProvider,
-  isDisabled
+  HookProvider
 } from '@hookland/inject'
 import { CssBaseline } from '@mui/material'
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import App from './App.tsx'
-import { HooklandScenarioProvider } from './HooklandScenarioProvider.tsx'
 import './index.css'
-import { balanceMock200 } from './RandomGame/__tests__/useBalanceMock.tsx'
 
 disableInjectableHooksDuringBuild(import.meta.env.MODE !== 'development')
 
@@ -19,7 +16,7 @@ createRoot(document.getElementById('root')!).render(
     <HookProvider
       hooks={[
         // { for: useRandomNumbers, use: useRandomNumbersMock },
-        balanceMock200
+        // balanceMock0
       ]}
     >
       <BrowserRouter>
@@ -36,10 +33,4 @@ function DisabledHooklandProvider({
   return children
 }
 
-function createHooklandProvider(disable = isDisabled()) {
-  if (disable) {
-    return DisabledHooklandProvider
-  }
 
-  return HooklandScenarioProvider
-}
