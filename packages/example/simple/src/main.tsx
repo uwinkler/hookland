@@ -3,11 +3,14 @@ import {
   HookProvider
 } from '@hookland/inject'
 import { CssBaseline } from '@mui/material'
-import React, { StrictMode } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import App from './App.tsx'
 import './index.css'
+import { balanceMock200 } from './RandomGame/__tests__/useBalanceMock.tsx'
+import { useRandomNumbersMock } from './RandomGame/__tests__/useRandomNumbersMock.tsx'
+import { useRandomNumbers } from './RandomGame/useRandomNumbers.tsx'
 
 disableInjectableHooksDuringBuild(import.meta.env.MODE !== 'development')
 
@@ -15,8 +18,8 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HookProvider
       hooks={[
-        // { for: useRandomNumbers, use: useRandomNumbersMock },
-        // balanceMock0
+        { for: useRandomNumbers, use: useRandomNumbersMock },
+        balanceMock200
       ]}
     >
       <BrowserRouter>
@@ -24,13 +27,7 @@ createRoot(document.getElementById('root')!).render(
         <App />
       </BrowserRouter>
     </HookProvider>
-  </StrictMode>
+  </StrictMode >
 )
-
-function DisabledHooklandProvider({
-  children
-}: React.PropsWithChildren<unknown>) {
-  return children
-}
 
 

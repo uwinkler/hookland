@@ -1,7 +1,7 @@
-import { createInjectableHook } from '@hookland/inject'
+
 import { useState } from 'react'
 
-export const useRandomNumbers = createInjectableHook(() => {
+export function useRandomNumbers() {
   const [luckyNumber, setLuckyNumber] = useState(randomNumberBetween100And999())
 
   function nextLuckyNumber() {
@@ -11,7 +11,7 @@ export const useRandomNumbers = createInjectableHook(() => {
   }
 
   return { luckyNumber, nextLuckyNumber }
-})
+}
 
 function randomNumberBetween100And999() {
   return Math.floor(Math.random() * 900) + 100

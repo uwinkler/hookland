@@ -1,0 +1,12 @@
+[
+  {
+    "functionName": "RandomGameThreeRolePebble",
+    "filePath": "/Users/uw/work/hookland/packages/example/simple/src/RandomGame/__tests__/RandomGameThreeRole.pebble.tsx",
+    "doc": "*\n * This is a block that tests the RandomGame component with three random tosses.\n * \n * @pebble"
+  },
+  {
+    "functionName": "RandomGameAlwaysWinPebble",
+    "filePath": "/Users/uw/work/hookland/packages/example/simple/src/RandomGame/__tests__/RandomGameAlwaysWin.pebble.tsx",
+    "doc": "*\n * A fixture that always wins the game.\n *\n * This is useful for testing the RandomGame component in a deterministic way:\n * - The game will always show the winning screen.\n * - No other rolls are possible.\n * - The `roll` function is disabled.\n *\n * @pebble"
+  }
+]
