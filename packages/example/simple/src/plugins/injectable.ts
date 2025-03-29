@@ -14,6 +14,16 @@ interface InjectableConfig {
   use: string
 }
 
+const DEBUG = false // Set to true to enable console logging
+
+function log(...args: unknown[]) {
+  if (DEBUG) console.log(...args)
+}
+
+// function error(...args: unknown[]) {
+//   if (DEBUG) console.error(...args)
+// }
+
 // Global map to store configurations from all files
 const globalConfigs = new Map<string, InjectableConfig>()
 // Map to store imported identifiers and their sources
@@ -59,7 +69,7 @@ function findInjectableConfigs(code: string): InjectableConfig[] {
             for: forProp.value.name,
             use: useProp.value.name
           }
-          console.log('Found injectable config:', config)
+          log('Found injectable config:', config)
           configs.push(config)
         }
       }
@@ -80,20 +90,10 @@ function collectImports(code: string): void {
       const source = path.node.source.value
       path.node.specifiers.forEach((specifier) => {
         if (t.isImportSpecifier(specifier)) {
-          console.log(
-            'Found named import:',
-            specifier.local.name,
-            'from',
-            source
-          )
+          log('Found named import:', specifier.local.name, 'from', source)
           importedIdentifiers.set(specifier.local.name, source)
         } else if (t.isImportDefaultSpecifier(specifier)) {
-          console.log(
-            'Found default import:',
-            specifier.local.name,
-            'from',
-            source
-          )
+          log('Found default import:', specifier.local.name, 'from', source)
           importedIdentifiers.set(specifier.local.name, source)
         }
       })
@@ -144,7 +144,7 @@ function transformInjectableFunctions(
   configs: InjectableConfig[],
   fileId: string
 ): string {
-  console.log('Transforming functions with configs:', Array.from(configs))
+  log('Transforming functions with configs:', Array.from(configs))
   const ast = parser.parse(code, {
     sourceType: 'module',
     plugins: ['jsx', 'typescript']
@@ -168,14 +168,11 @@ function transformInjectableFunctions(
             t.isIdentifier(parent.declarations[0].init.callee) &&
             parent.declarations[0].init.callee.name === 'createInjectableHook'
           ) {
-            console.log(
-              'Skipping already wrapped function declaration:',
-              functionName
-            )
+            log('Skipping already wrapped function declaration:', functionName)
             return
           }
 
-          console.log('Found function declaration to wrap:', functionName)
+          log('Found function declaration to wrap:', functionName)
           needsImport = true
           // Create a function expression from the declaration
           const functionExpr = t.functionExpression(
@@ -196,7 +193,7 @@ function transformInjectableFunctions(
               t.variableDeclarator(path.node.id, wrappedFunction)
             ])
           )
-          console.log('Wrapped function declaration:', functionName)
+          log('Wrapped function declaration:', functionName)
         }
       }
     },
@@ -214,23 +211,17 @@ function transformInjectableFunctions(
             t.isIdentifier(path.node.init.callee) &&
             path.node.init.callee.name === 'createInjectableHook'
           ) {
-            console.log(
-              'Skipping already wrapped variable declaration:',
-              functionName
-            )
+            log('Skipping already wrapped variable declaration:', functionName)
             return
           }
 
-          console.log('Found variable declaration to wrap:', functionName)
+          log('Found variable declaration to wrap:', functionName)
           needsImport = true
           let functionToWrap = path.node.init
 
           // If it's an arrow function, convert it to a regular function expression
           if (t.isArrowFunctionExpression(functionToWrap)) {
-            console.log(
-              'Converting arrow function to regular function:',
-              functionName
-            )
+            log('Converting arrow function to regular function:', functionName)
             const body = t.isBlockStatement(functionToWrap.body)
               ? functionToWrap.body
               : t.blockStatement([t.returnStatement(functionToWrap.body)])
@@ -251,7 +242,7 @@ function transformInjectableFunctions(
 
             // Replace the original function with the wrapped one
             path.node.init = wrappedFunction
-            console.log('Wrapped variable declaration:', functionName)
+            log('Wrapped variable declaration:', functionName)
           }
         }
       }
@@ -263,7 +254,7 @@ function transformInjectableFunctions(
     if (!checkForInjectableHookImport(code)) {
       addInjectableHookImport(ast)
       hasInjectableHookImport.add(fileId)
-      console.log('Added createInjectableHook import')
+      log('Added createInjectableHook import')
     }
   }
 
@@ -278,12 +269,12 @@ export default function injectablePlugin(): Plugin {
 
       // Skip if we've already processed this file
       if (processedFiles.has(id)) {
-        console.log('Skipping already processed file:', id)
+        log('Skipping already processed file:', id)
         return null
       }
 
-      console.log('\nProcessing file:', id)
-      console.log('----------------------------------------')
+      log('\nProcessing file:', id)
+      log('----------------------------------------')
 
       // First pass: collect configurations and imports
       const configs = findInjectableConfigs(code)
@@ -293,11 +284,8 @@ export default function injectablePlugin(): Plugin {
         globalConfigs.set(config.for, config)
       })
 
-      console.log(
-        'Current global configs:',
-        Array.from(globalConfigs.entries())
-      )
-      console.log(
+      log('Current global configs:', Array.from(globalConfigs.entries()))
+      log(
         'Current imported identifiers:',
         Array.from(importedIdentifiers.entries())
       )
@@ -312,7 +300,7 @@ export default function injectablePlugin(): Plugin {
       // Mark this file as processed
       processedFiles.add(id)
 
-      console.log('----------------------------------------\n')
+      log('----------------------------------------\n')
       return {
         code: transformedCode,
         map: null

@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router'
 import { Login } from './Login/Login'
 import ProtectedRoute from './Login/ProtectedRoute'
-import { Pebbles } from './PebblesComp'
 import { RandomGame } from './RandomGame/RandomGame'
 import { TopUp } from './TopUp/TopUp'
+import { PebbleViewer } from './components/PebbleViewer'
 
 export default function App() {
   return <Routes>
@@ -12,9 +12,7 @@ export default function App() {
       <Route path="game" element={<RandomGame />} />
       <Route path="top-up" element={<TopUp />} />
     </Route>
-    <Route path="/pebble" element={<Pebbles />} >
-      <Route path=":id" element={<Pebbles />} />
-    </Route>
+    <Route path="/pebbles" element={<PebbleViewer />} />
   </Routes>
 }
 
