@@ -1,9 +1,8 @@
-import { createInjectableHook } from '@hookland/inject'
 import { isWin } from './isWin'
 import { useBalance } from './useBalance'
 import { useRandomNumbers } from './useRandomNumbers'
 
-export const useGamePlay = createInjectableHook(() => {
+export function useGamePlay() {
   const { luckyNumber, nextLuckyNumber } = useRandomNumbers()
   const { deposit, withdraw, balance } = useBalance()
 
@@ -17,6 +16,6 @@ export const useGamePlay = createInjectableHook(() => {
   }
 
   return { luckyNumber, roll, balance }
-})
+}
 
 

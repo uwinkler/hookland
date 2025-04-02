@@ -1,8 +1,7 @@
-import { createInjectableHook } from '@hookland/inject'
 import React from 'react'
 import { useAuthState } from '../useAuthState'
 
-export const useBalance = createInjectableHook(() => {
+export function useBalance() {
   const [balance, setBalance] = React.useState<number>(0)
   const { authState } = useAuthState()
   const user = authState.user
@@ -42,7 +41,7 @@ export const useBalance = createInjectableHook(() => {
   )
 
   return { balance, deposit, withdraw }
-})
+}
 
 async function fetchBalance(currentUser: string) {
   return Number(window.sessionStorage.getItem(currentUser) || 100)

@@ -12,12 +12,23 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
+    "views": {
+      "pebble-explorer": [
+        {
+          "icon": "resources/pebble.svg",
+          "id": "pebbleTreeView",
+          "name": "Pebbles"
+        }
+      ]
+    },
+    "pebble-explorer": [
       {
-        "command": "vscode-pebbles.helloWorld",
-        "title": "Hello World"
+        "icon": "resources/pebble.svg",
+        "id": "pebbleTreeView",
+        "name": "Pebble Items"
       }
-    ]
+    ],
+    "commands": []
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
