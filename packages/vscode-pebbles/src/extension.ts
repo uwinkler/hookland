@@ -42,8 +42,10 @@ export function activate(context: vscode.ExtensionContext) {
     async (filePath: string, pebbleName, lineNumber: number) => {
       const document = await vscode.workspace.openTextDocument(filePath)
       const position = new vscode.Position(lineNumber - 1, 0)
+
       await vscode.window.showTextDocument(document, {
-        selection: new vscode.Range(position, position)
+        selection: new vscode.Range(position, position),
+        viewColumn: vscode.ViewColumn.One
       })
 
       await vscode.commands.executeCommand(

@@ -14,3 +14,14 @@ export function RandomGameThreeRolePebble() {
     </HookProvider>
   )
 }
+
+/**
+ * @pebble
+ */
+export function RandomGameSomeOtherPebble() {
+  return (
+    <HookProvider hooks={[randomNumbersMock]}>
+      <RandomGame />
+    </HookProvider>
+  )
+}

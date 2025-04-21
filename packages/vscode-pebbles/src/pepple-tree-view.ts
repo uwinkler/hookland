@@ -30,11 +30,6 @@ class PebbleFileItem extends vscode.TreeItem {
     super(label, collapsibleState)
     this.tooltip = filePath
     this.iconPath = new vscode.ThemeIcon('symbol-property')
-    // this.command = {
-    //   command: 'vscode-pebbles.openFileAtLine',
-    //   title: 'Open File and Show Preview',
-    //   arguments: [filePath, 1]
-    // }
   }
 }
 
