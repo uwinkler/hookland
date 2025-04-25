@@ -18,7 +18,10 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HookProvider
       hooks={[
-        { for: useRandomNumbers, use: useRandomNumbersMock },
+        {
+          for: useRandomNumbers,
+          use: useRandomNumbersMock
+        },
         balanceMock200
       ]}
     >

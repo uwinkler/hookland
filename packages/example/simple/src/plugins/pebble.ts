@@ -90,7 +90,7 @@ function processFile(filePath: string) {
       }
     })
   } catch (e) {
-    error(`[Pebble Plugin] Error processing ${filePath}:`, error)
+    error(`[Pebble Plugin] Error processing ${filePath}:`, e)
   }
 }
 

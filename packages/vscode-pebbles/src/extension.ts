@@ -18,8 +18,8 @@ export function activate(context: vscode.ExtensionContext) {
   // Register command to open pebble webview
   const openPebbleWebview = vscode.commands.registerCommand(
     'vscode-pebbles.openPebbleWebview',
-    (filePath: string, pebbleName: string) => {
-      PebbleWebviewPanel.createOrShow(filePath, pebbleName)
+    (filePath: string, pebbleName: string, workspaceFolder: string) => {
+      PebbleWebviewPanel.createOrShow(filePath, pebbleName, workspaceFolder)
     }
   )
 
@@ -42,17 +42,19 @@ export function activate(context: vscode.ExtensionContext) {
     async (filePath: string, pebbleName, lineNumber: number) => {
       const document = await vscode.workspace.openTextDocument(filePath)
       const position = new vscode.Position(lineNumber - 1, 0)
+      const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri)
+
+      await vscode.commands.executeCommand(
+        'vscode-pebbles.openPebbleWebview',
+        filePath,
+        pebbleName,
+        workspaceFolder?.uri.fsPath || ''
+      )
 
       await vscode.window.showTextDocument(document, {
         selection: new vscode.Range(position, position),
         viewColumn: vscode.ViewColumn.One
       })
-
-      await vscode.commands.executeCommand(
-        'vscode-pebbles.openPebbleWebview',
-        filePath,
-        pebbleName
-      )
     }
   )
 

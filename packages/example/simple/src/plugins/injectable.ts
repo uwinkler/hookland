@@ -17,7 +17,7 @@ interface InjectableConfig {
 const DEBUG = false // Set to true to enable console logging
 
 function log(...args: unknown[]) {
-  if (DEBUG) console.log(...args)
+  if (DEBUG) console.log('[Inject Plugin]', ...args)
 }
 
 // function error(...args: unknown[]) {

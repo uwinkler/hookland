@@ -1,12 +1,5 @@
 import * as vscode from 'vscode'
 
-interface PebbleItem {
-  label: string
-  filePath: string
-  functionName: string
-  lineNumber: number
-}
-
 export class PebbleWebviewPanel {
   public static currentPanel: PebbleWebviewPanel | undefined
   private readonly _panel: vscode.WebviewPanel
@@ -16,22 +9,27 @@ export class PebbleWebviewPanel {
     panel: vscode.WebviewPanel
     filePath: string
     pebbleName: string
+    workspaceFolder: string
   }) {
     this._panel = props.panel
 
     // Set the webview's initial html content
-    this._panel.webview.html = this._getHtmlForWebview(
-      this._panel.webview,
-      props.filePath,
-      props.pebbleName
-    )
+    this._panel.webview.html = this._getHtmlForWebview({
+      filePath: props.filePath,
+      pebbleName: props.pebbleName,
+      workspaceFolder: props.workspaceFolder
+    })
 
     // Listen for when the panel is disposed
     // This happens when the user closes the panel or when the panel is closed programmatically
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables)
   }
 
-  public static createOrShow(filePath: string, pebbleName: string) {
+  public static createOrShow(
+    filePath: string,
+    pebbleName: string,
+    workspaceFolder: string
+  ) {
     const column = vscode.ViewColumn.Two
 
     // If we already have a panel, dispose it
@@ -42,7 +40,7 @@ export class PebbleWebviewPanel {
     const panel = vscode.window.createWebviewPanel(
       'pebbleWebview',
       pebbleName,
-      column,
+      { viewColumn: column, preserveFocus: true },
       {
         enableScripts: true,
         retainContextWhenHidden: false
@@ -52,17 +50,25 @@ export class PebbleWebviewPanel {
     PebbleWebviewPanel.currentPanel = new PebbleWebviewPanel({
       panel,
       filePath,
-      pebbleName
+      pebbleName,
+      workspaceFolder
     })
   }
 
-  private _getHtmlForWebview(
-    webview: vscode.Webview,
-    filePath: string,
+  private _getHtmlForWebview(props: {
     pebbleName: string
-  ) {
-    const encodedFilePath = encodeURIComponent(filePath)
+    filePath: string
+    workspaceFolder: string
+  }) {
+    const { pebbleName, filePath, workspaceFolder } = props
+    console.log('filePath', filePath)
+    console.log('workspaceFolder', workspaceFolder)
+    const relativePath = filePath.replace(workspaceFolder, '')
+    const encodedFilePath = encodeURIComponent(relativePath)
     console.log('encodedFilePath', encodedFilePath)
+
+    const iframeSrc = `http://localhost:5173?pebbleFunction=${pebbleName}&pebbleFilePath=${encodedFilePath}`
+    console.log('iframeSrc', iframeSrc)
 
     return `
             <!DOCTYPE html>
@@ -78,9 +84,6 @@ export class PebbleWebviewPanel {
                         width: 100vw;
                         height: 100vh;
                         overflow: hidden;
-                        color: var(--vscode-editor-foreground);
-                        background-color: var(--vscode-editor-background);
-                        font-family: var(--vscode-font-family);
                         display: flex;
                     }
                     .preview-container {
@@ -98,7 +101,7 @@ export class PebbleWebviewPanel {
             </head>
             <body>
                 <div class="preview-container">
-                    <iframe src="http://localhost:5173?pebble=${pebbleName}"></iframe>
+                    <iframe src="${iframeSrc}"></iframe>
                 </div>
             </body>
             </html>
