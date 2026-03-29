@@ -1,24 +1,23 @@
 import {
+  act,
   cleanup,
   fireEvent,
   render,
   renderHook,
-  screen,
+  screen
 } from "@testing-library/react";
-import React, { act } from "react";
-import { afterEach, expect, test } from "vitest";
-import { createTinyStore } from "../create-tiny-store";
+import { afterEach, expect, test, vi } from "vitest";
+import { createTinyState } from "../create-tiny-state";
 
 afterEach(() => {
   cleanup(); // This will unmount the component from the screen
 });
 
 test("createTinyStore - get initial value", () => {
-  const [createTinyState] = createTinyStore();
-  const useTinyState = createTinyState(1);
+  const [useMyCounter] = createTinyState(1);
 
   function Comp() {
-    const [value] = useTinyState();
+    const [value] = useMyCounter();
     return JSON.stringify({ a: value });
   }
 
@@ -28,8 +27,7 @@ test("createTinyStore - get initial value", () => {
 });
 
 test("createTinyStore - simple two components", () => {
-  const [createTinyState] = createTinyStore();
-  const useTinyState = createTinyState(1);
+  const [useTinyState] = createTinyState(1);
 
   function CompA() {
     const [value] = useTinyState();
@@ -55,8 +53,7 @@ test("createTinyStore - simple two components", () => {
 });
 
 test("createTinyStore - update value", () => {
-  const [createTinyState] = createTinyStore();
-  const useTinyState = createTinyState(1);
+  const [useTinyState] = createTinyState(1);
   const { result } = renderHook(() => useTinyState());
   const [value, setValue] = result.current;
   expect(value).toBe(1);
@@ -65,8 +62,7 @@ test("createTinyStore - update value", () => {
 });
 
 test("createTinyStore - update value - with Components", () => {
-  const [createTinyState] = createTinyStore();
-  const useTinyState = createTinyState(1);
+  const [useTinyState] = createTinyState(1);
   const { result } = renderHook(() => useTinyState());
   const [value, setValue] = result.current;
   expect(value).toBe(1);
@@ -99,8 +95,7 @@ test("createTinyStore - update value - with Components", () => {
 });
 
 test("createTinyStore - using Provider", () => {
-  const [createTinyState, MyTinyStoreProvider] = createTinyStore();
-  const useTinyState = createTinyState(1);
+  const [useTinyState, MyTinyStoreProvider] = createTinyState(1);
 
   function CompWrapper() {
     return (
@@ -125,9 +120,35 @@ test("createTinyStore - using Provider", () => {
   }
 });
 
+
+test("createTinyStore - using Provider with inital value", () => {
+  const [useTinyState, MyTinyStoreProvider] = createTinyState(1);
+
+  function CompWrapper() {
+    return (
+      <MyTinyStoreProvider initalValue={2}>
+        <CompA />
+      </MyTinyStoreProvider>
+    );
+  }
+
+  function CompA() {
+    const [value] = useTinyState();
+    return JSON.stringify({ a: value });
+  }
+
+  {
+    const { asFragment } = render(<CompWrapper />);
+    expect(asFragment()).toMatchInlineSnapshot(`
+    <DocumentFragment>
+      {"a":2}
+    </DocumentFragment>
+  `);
+  }
+});
+
 test("createTinyStore - using Provider and updating outside of component tree", () => {
-  const [createTinyState, MyTinyStoreProvider] = createTinyStore();
-  const useTinyState = createTinyState(1);
+  const [useTinyState, MyTinyStoreProvider] = createTinyState(1);
 
   function CompWrapper() {
     return (
@@ -168,8 +189,7 @@ test("createTinyStore - using Provider and updating outside of component tree", 
 });
 
 test("createTinyStore - using Provider and updating inside of the component tree", () => {
-  const [createTinyState, MyTinyStoreProvider] = createTinyStore();
-  const useTinyState = createTinyState(1);
+  const [useTinyState, MyTinyStoreProvider] = createTinyState(1);
 
   function CompWrapper() {
     return (
@@ -205,8 +225,7 @@ test("createTinyStore - using Provider and updating inside of the component tree
 });
 
 test("createTinyStore - using Provider and updating inside of the component tree but having two isolated parts", () => {
-  const [createTinyState, MyTinyStoreProvider] = createTinyStore();
-  const useTinyState = createTinyState(1);
+  const [useTinyState, MyTinyStoreProvider] = createTinyState(1);
 
   function CompWrapper() {
     return (
@@ -254,62 +273,122 @@ test("createTinyStore - using Provider and updating inside of the component tree
 });
 
 
-
-
-test("createTinyStore - using default value", () => {
-  const [createTinyState, MyTinyStoreProvider] = createTinyStore();
-  const useTinyState = createTinyState(1);
-
-  function CompWrapper() {
-    return (
-      <MyTinyStoreProvider>
-        <CompA />
-      </MyTinyStoreProvider>
-    );
-  }
+test("createTinyState - getValue outside of the component tree", () => {
+  const [useTinyState, _, getValue] = createTinyState(1);
 
   function CompA() {
-    // Initialize with a new default value of 2. This
-    // should override the default value of 1
-    const [value] = useTinyState(2);
+    const [value] = useTinyState();
     return JSON.stringify({ a: value });
   }
 
-  render(<CompWrapper />);
+  function CompWrapper() {
+    return (
+      <CompA />
+    );
+  }
 
-  expect(screen.getByText(/{"a":2}/)).not.toBeNull();
+  render(<CompWrapper />);
+  expect(screen.getByText(/{"a":1}/)).not.toBeNull();
+
+  // We get the value outside the component tree
+  expect(getValue()).toBe(1);
 });
 
 
-test("createTinyStore - using default value ", () => {
-  const [createTinyState, MyTinyStoreProvider] = createTinyStore();
-  const useTinyState = createTinyState(1);
-
-  function CompWrapper() {
-    return (
-      <MyTinyStoreProvider>
-        <CompB />
-        <CompA />
-      </MyTinyStoreProvider>
-    );
-  }
+test("createTinyState - setValue outside of the component tree", () => {
+  const [useTinyState, _, getValue, setValue] = createTinyState(1);
 
   function CompA() {
-    // Update the default value to 2
-    const [value] = useTinyState(2);
+    const [value] = useTinyState();
     return JSON.stringify({ a: value });
   }
 
-  function CompB() {
-    // We don't update the initial value
-    // but we expect the initial value to be 2 now,
-    // as the default value is overridden in CompA
-    const [value] = useTinyState();
-    return JSON.stringify({ b: value });
+  function CompWrapper() {
+    return (
+      <CompA />
+    );
   }
 
   render(<CompWrapper />);
+  expect(screen.getByText(/{"a":1}/)).not.toBeNull();
 
+  act(() => {
+    setValue(2);
+  })
+
+  // We get the value outside the component tree
+  expect(getValue()).toBe(2);
+
+  // We expect the component to update as well
   expect(screen.getByText(/{"a":2}/)).not.toBeNull();
-  expect(screen.getByText(/{"b":2}/)).not.toBeNull();
-}); 
+});
+
+test("performance - only subscribed components re-render", () => {
+  const [useA] = createTinyState(0);
+  const [useB] = createTinyState(0);
+
+  const renderCountA = vi.fn();
+  const renderCountB = vi.fn();
+
+  function CompA() {
+    const [v, setV] = useA();
+    renderCountA();
+    return <button onClick={() => setV(v + 1)}>A: {v}</button>;
+  }
+
+  function CompB() {
+    useB();
+    renderCountB();
+    return <div>B</div>;
+  }
+
+  render(
+    <>
+      <CompA />
+      <CompB />
+    </>
+  );
+  expect(renderCountA).toHaveBeenCalledTimes(1);
+  expect(renderCountB).toHaveBeenCalledTimes(1);
+
+  act(() => {
+    fireEvent.click(screen.getByText(/A:/));
+  });
+
+  // CompA should re-render, CompB should NOT
+  expect(renderCountA).toHaveBeenCalledTimes(2);
+  expect(renderCountB).toHaveBeenCalledTimes(1);
+});
+
+test("performance - handles many subscribers", () => {
+  const [useCounter] = createTinyState(0);
+  const hooks = Array.from({ length: 100 }, () =>
+    renderHook(() => useCounter())
+  );
+
+  act(() => hooks[0].result.current[1](42));
+
+  hooks.forEach((h) => expect(h.result.current[0]).toBe(42));
+});
+
+test("performance - no re-render when setting same value", () => {
+  const [useCounter] = createTinyState(1);
+  const renderCount = vi.fn();
+
+  function Comp() {
+    const [v, setV] = useCounter();
+    renderCount();
+    return <button onClick={() => setV(1)}>val: {v}</button>;
+  }
+
+  render(<Comp />);
+  expect(renderCount).toHaveBeenCalledTimes(1);
+
+  act(() => {
+    fireEvent.click(screen.getByText(/val:/));
+  });
+
+  // Should NOT re-render because value didn't change
+  expect(renderCount).toHaveBeenCalledTimes(1);
+});
+
